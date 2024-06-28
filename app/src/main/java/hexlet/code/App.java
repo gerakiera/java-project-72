@@ -7,9 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 public class App {
     public static Javalin getApp() {
-        var app = Javalin.create(config -> {
-            config.bundledPlugins.enableDevLogging();
-        });
+        var app = Javalin.create(config -> config.bundledPlugins.enableDevLogging());
         app.get("/", ctx -> ctx.result("Hello, World"));
         return app;
     }
