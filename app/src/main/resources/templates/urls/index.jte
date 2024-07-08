@@ -21,10 +21,8 @@ content = @`
             @endif
         @endif
         <section>
-
             <div class="container-lg mt-5">
                 <h1>Сайты</h1>
-
                 <table class="table table-bordered table-hover mt-3">
                     <thead>
                     <tr>
@@ -52,20 +50,15 @@ content = @`
                                 </td>
                             @else
                                 <td>
-
                                 </td>
                                 <td>
-
                                 </td>
                             @endif
-
                         </tr>
                     @endfor
-
                     </tbody>
                 </table>
             </div>
-
         </section>
     </main>
 `

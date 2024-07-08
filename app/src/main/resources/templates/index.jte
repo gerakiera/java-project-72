@@ -27,7 +27,7 @@ content = @`
                 </div>
                 <div class="form-text">Пример: https://www.example.com</div>
                 <div class="col-auto">
-                    <button class="btn btn-primary col-auto" type="submit">Проверить</button>
+                    <button class="btn btn-secondary btn-lg btn-block" type="submit">Проверить</button>
                 </div>
             </div>
         </form>
