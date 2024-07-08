@@ -2,6 +2,8 @@ plugins {
     id("java")
     id("com.github.johnrengelman.shadow") version "8.1.1"
     application
+    jacoco
+    checkstyle
 }
 
 application {
@@ -30,6 +32,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("com.konghq:unirest-java:3.13.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+    testImplementation("org.assertj:assertj-core:3.24.2")
 }
 
 tasks.test {
