@@ -39,6 +39,9 @@ public class App {
             config.bundledPlugins.enableDevLogging();
             config.fileRenderer(new JavalinJte(createTemplateEngine()));
         });
+        app.before(ctx -> {
+            ctx.contentType("text/html; charset=utf-8");
+        });
 
         app.get(NamedRoutes.rootPath(), UrlsController::root);
         app.get(NamedRoutes.urlsPath(), UrlsController::index);

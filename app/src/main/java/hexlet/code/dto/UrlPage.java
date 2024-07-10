@@ -11,4 +11,5 @@ public class UrlPage {
         this.url = url;
         this.flash = flash;
     }
+
 }
