@@ -53,7 +53,7 @@ public class AppTest {
             Assertions.assertEquals(200, response.code());
         });
     }
-    /*@Test
+    @Test
     public void testAddUrl() {
         JavalinTest.test(app, (srv, client) -> {
             var requestBody = "url=http://localhost:7070/abc";
@@ -74,5 +74,5 @@ public class AppTest {
             var urls = UrlsRepository.getByName("abc");
             assertThat(urls).isEmpty();
         });
-    }*/
+    }
 }
