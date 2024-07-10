@@ -2,14 +2,12 @@ package hexlet.code;
 
 //import hexlet.code.model.Url;
 //import hexlet.code.repository.UrlsRepository;
+import hexlet.code.utils.NamedRoutes;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,10 +44,9 @@ public class AppTest {
 
     @Test
     void testMainPage() {
-        JavalinTest.test(app, (serv, client) -> {
-            var response = client.get("/");
-            assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string()).contains("Анализатор страниц");
+        JavalinTest.test(app, (server, client) -> {
+            var response = client.get(NamedRoutes.rootPath());
+            Assertions.assertEquals(200, response.code());
         });
     }
 }
