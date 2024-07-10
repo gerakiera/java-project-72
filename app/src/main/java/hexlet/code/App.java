@@ -43,6 +43,7 @@ public class App {
             ctx.contentType("text/html; charset=utf-8");
         });
 
+
         app.get(NamedRoutes.rootPath(), UrlsController::root);
         app.get(NamedRoutes.urlsPath(), UrlsController::index);
         app.post(NamedRoutes.urlsPath(), UrlsController::create);

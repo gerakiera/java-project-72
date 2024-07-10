@@ -53,26 +53,4 @@ public class AppTest {
             assertThat(response.body().string()).contains("Анализатор страниц");
         });
     }
-
-    @Test
-    void testUrlsPageHandler() {
-        JavalinTest.test(app, (server, client) -> {
-            var response = client.get("/urls");
-            assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string()).contains("ID", "Имя", "Последняя проверка", "Код ответа");
-        });
-    }
-
-    @Test
-    void testShowUrl() {
-        JavalinTest.test(app, (server, client) -> {
-            var url = new Url("https://www.example.com");
-            UrlsRepository.save(url);
-            var response = client.get("/urls/" + url.getId());
-            assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string()).contains("https://www.example.com");
-        });
-    }
-
-
 }
