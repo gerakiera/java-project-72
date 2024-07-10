@@ -1,23 +1,23 @@
 package hexlet.code;
 
-//import hexlet.code.model.Url;
-//import hexlet.code.repository.UrlsRepository;
 import hexlet.code.utils.NamedRoutes;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import org.junit.jupiter.api.*;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 
 public class AppTest {
-    private static MockWebServer server;
+    private static MockWebServer mockWebServer;
     public static Javalin app;
     //private static String testUrl;
     @BeforeEach
@@ -27,19 +27,19 @@ public class AppTest {
 
     @BeforeAll
     public static void beforeAll() throws IOException {
-        server = new MockWebServer();
+        mockWebServer = new MockWebServer();
         var html = Files.readString(Paths.get("src/test/resources/test.html"));
         var serverResponse = new MockResponse()
                 .addHeader("Content-Type", "text/html; charset=utf-8")
                 .setResponseCode(200)
                 .setBody(html);
-        server.enqueue(serverResponse);
-        server.start();
+        mockWebServer.enqueue(serverResponse);
+        mockWebServer.start();
     }
 
     @AfterAll
     public static void shutDown() throws IOException {
-        server.shutdown();
+        mockWebServer.shutdown();
     }
 
     @Test
