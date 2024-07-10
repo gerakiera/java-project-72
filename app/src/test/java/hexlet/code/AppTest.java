@@ -1,7 +1,7 @@
 package hexlet.code;
 
-import hexlet.code.model.Url;
-import hexlet.code.repository.UrlsRepository;
+//import hexlet.code.model.Url;
+//import hexlet.code.repository.UrlsRepository;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.mockwebserver.MockResponse;
@@ -21,8 +21,7 @@ import java.nio.file.Paths;
 public class AppTest {
     private static MockWebServer server;
     public static Javalin app;
-    private static String testUrl;
-    
+    //private static String testUrl;
     @BeforeEach
     public final void setApp() throws IOException, SQLException {
         app = App.getApp();
