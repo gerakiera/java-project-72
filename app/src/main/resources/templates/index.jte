@@ -4,33 +4,35 @@
 @template.layout.page(
 content = @`
     @if(page.getFlash() != null)
-        @if(page.getFlashType().equals("error"))
-            <div class="alert alert-warning" role="alert">
-        @else
-            <div class="alert alert-primary" role="alert">
-        @endif
-        ${page.getFlash()}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+        <div class="alert alert-warning" role="alert">
+            <p class="m-0">${page.getFlash()}</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
         </div>
     @endif
+    <section>
     <div class="container text-center">
         <div class="row">
             <div class="col">
                 <h1>Анализатор страниц</h1>
+                <p class="lead">Бесплатно проверяйте сайты на SEO пригодность</p>
+                <form action="/urls" method="post" class="rss-form text-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-floating">
+                                <input id="url-input" autofocus type="text" required name="url" aria-label="url"
+                                       class="form-control w-100" placeholder="ссылка" autocomplete="off">
+                                <label for="url-input">Ссылка</label>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="h-100 btn btn-lg btn-primary px-sm-5">Проверить</button>
+                        </div>
+                    </div>
+                </form>
+                <p class="mt-2 mb-0 text-muted">Пример: https://www.example.com</p>
             </div>
         </div>
-        <form action="/urls" method="post" class="rss-form text-body">
-            <div class="mb-3">
-                <label class="form-label">Бесплатно проверяйте сайты на SEO пригодность</label>
-                <div class="col-auto">
-                    <input name="url" type="text" class="form-control form-control-lg" placeholder="Ссылка">
-                </div>
-                <div class="form-text">Пример: https://www.example.com</div>
-                <div class="col-auto">
-                    <button class="btn btn-secondary btn-lg btn-block" type="submit">Проверить</button>
-                </div>
-            </div>
-        </form>
     </div>
+    </section>
 `
 )
