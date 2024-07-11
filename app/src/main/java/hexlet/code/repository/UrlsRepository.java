@@ -75,8 +75,8 @@ public class UrlsRepository extends BaseRepository {
             if (resultSet.next()) {
                 var id = resultSet.getLong("id");
                 var createdAt = resultSet.getTimestamp("created_at");
-                var site = new Url(id, name, createdAt);
-                return Optional.of(site);
+                var url = new Url(name);
+                return Optional.of(url);
             } else {
                 return Optional.empty();
             }
