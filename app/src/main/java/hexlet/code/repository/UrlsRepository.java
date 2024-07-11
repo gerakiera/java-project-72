@@ -1,7 +1,6 @@
 package hexlet.code.repository;
 
 import hexlet.code.model.Url;
-import lombok.SneakyThrows;
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -72,8 +71,8 @@ public class UrlsRepository extends BaseRepository {
             stmt.setString(1, name);
             var resultSet = stmt.executeQuery();
             if (resultSet.next()) {
-                var id = resultSet.getLong("id");
-                var createdAt = resultSet.getTimestamp("created_at");
+                //var id = resultSet.getLong("id");
+                //var createdAt = resultSet.getTimestamp("created_at");
                 var url = new Url(name);
                 return Optional.of(url);
             } else {
