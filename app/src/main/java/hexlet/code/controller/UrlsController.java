@@ -70,7 +70,7 @@ public class UrlsController {
                 .orElseThrow(() -> new NotFoundResponse("Url not found"));
         try {
             HttpResponse<String> response = Unirest.get(url.getName()).asString();
-            var codeResponse = response.getStatus();;
+            var codeResponse = response.getStatus();
             var doc = Jsoup.parse(response.getBody());
             var title = doc.title();
             Element h1Element = doc.selectFirst("h1");
