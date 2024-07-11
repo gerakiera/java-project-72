@@ -65,8 +65,7 @@ public class UrlsRepository extends BaseRepository {
             return result;
         }
     }
-    @SneakyThrows
-    public static Optional<Url> getByName(String name) {
+    public static Optional<Url> getByName(String name) throws SQLException {
         var sql = "SELECT * FROM urls WHERE name = ?";
         try (var conn = dataSource.getConnection();
              var stmt = conn.prepareStatement(sql)) {
