@@ -8,8 +8,4 @@ import lombok.Setter;
 public class BasePage {
     private String flash;
     private String flashType;
-    public BasePage(String flash) {
-        this.flash = flash;
-    }
-
 }
