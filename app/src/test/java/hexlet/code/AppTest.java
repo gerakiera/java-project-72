@@ -50,6 +50,7 @@ public class AppTest {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get(NamedRoutes.rootPath());
             assertThat(response.code()).isEqualTo(200);
+            assert response.body() != null;
             assertThat(response.body().string()).contains("Анализатор страниц");
         });
     }
@@ -59,6 +60,7 @@ public class AppTest {
             var requestBody = "url=http://localhost:7070/abc";
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
+            assert response.body() != null;
             assertThat(response.body().string()).contains("http://localhost:7070");
             var url = UrlsRepository.getByName("http://localhost:7070")
                     .orElse(new Url("")).getName();
