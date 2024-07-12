@@ -20,7 +20,6 @@ import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 @Slf4j
-
 public class App {
     public static Javalin getApp() throws SQLException, IOException {
         var hikariConfig = new HikariConfig();
@@ -28,6 +27,7 @@ public class App {
 
         var dataSource = new HikariDataSource(hikariConfig);
         var sql = readResourceFile("schema.sql");
+        log.info(sql);
 
         try (var connection = dataSource.getConnection();
              var statement = connection.createStatement()) {
@@ -43,11 +43,11 @@ public class App {
             ctx.contentType("text/html; charset=utf-8");
         });
 
-
         app.get(NamedRoutes.rootPath(), UrlsController::root);
         app.get(NamedRoutes.urlsPath(), UrlsController::index);
         app.post(NamedRoutes.urlsPath(), UrlsController::create);
         app.get(NamedRoutes.urlPath("{id}"), UrlsController::show);
+        app.post(NamedRoutes.urlCheckPath("{id}"), UrlsController::check);
 
         return app;
     }
