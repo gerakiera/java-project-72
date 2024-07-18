@@ -2,6 +2,7 @@ package hexlet.code.repository;
 
 import hexlet.code.model.Url;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -76,6 +77,19 @@ public class UrlsRepository extends BaseRepository {
             } else {
                 return Optional.empty();
             }
+        }
+    }
+
+    public static boolean isExist(String urlName) throws SQLException {
+        var sql = "SELECT * FROM urls WHERE name = ?";
+        try (var conn = dataSource.getConnection();
+             var stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, urlName);
+            var result = stmt.executeQuery();
+            if (result.next()) {
+                return true;
+            }
+            return false;
         }
     }
 }

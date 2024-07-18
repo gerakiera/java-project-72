@@ -16,9 +16,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Objects;
+import java.util.Collections;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
 
@@ -47,23 +49,36 @@ public class UrlsController {
         ctx.render("urls/show.jte", model("page", page));
     }
 
-    public static void create(Context ctx) {
+    public static void create(Context ctx) throws SQLException {
         try {
-            var noValidName = ctx.formParam("url");
-            var urlName = new URL(Objects.requireNonNull(noValidName));
-            String name = urlName.getProtocol() + "://" + urlName.getAuthority();
-            var url = new Url(name);
-            UrlsRepository.save(url);
-            ctx.sessionAttribute("flash", "Страница успешно добавлена");
-            ctx.redirect(NamedRoutes.urlsPath());
-        } catch (SQLException e) {
-            ctx.sessionAttribute("flash", "Страница уже существует");
-            ctx.redirect(NamedRoutes.urlsPath());
-        } catch (MalformedURLException e) {
-            ctx.sessionAttribute("flash", "Некоректный URL");
-            ctx.redirect(NamedRoutes.rootPath());
+            var name = buildUrl(new URI(ctx.formParamAsClass("url", String.class).getOrDefault("")).toURL());
+
+            if (UrlsRepository.isExist(name)) {
+                ctx.sessionAttribute("flash", "Страница уже существует");
+                ctx.sessionAttribute("flashType", "info");
+                ctx.redirect(NamedRoutes.urlsPath());
+            } else {
+                Url url = new Url(name);
+                UrlsRepository.save(url);
+                ctx.sessionAttribute("flash", "Страница успешно добавлена");
+                ctx.sessionAttribute("flashType", "correct");
+                ctx.redirect(NamedRoutes.urlsPath());
+            }
+        } catch (IllegalArgumentException | MalformedURLException | URISyntaxException e) {
+            var page = new BasePage();
+            page.setFlash("Некорректный URL");
+            page.setFlashType("error");
+            ctx.status(400);
+            ctx.render("index.jte", Collections.singletonMap("page", page));
         }
     }
+    private static String buildUrl(URL url) {
+        var protocol = url.getProtocol().isEmpty() ? "" : url.getProtocol();
+        String host = url.getHost().isEmpty() ? "" : url.getHost();
+        String port = url.getPort() == -1 ? "" : ":" + url.getPort();
+        return String.format("%s://%s%s", protocol, host, port);
+    }
+
     public static void check(Context ctx) throws SQLException {
         var urlId = ctx.pathParamAsClass("id", Long.class).get();
         var url = UrlsRepository.find(urlId)
@@ -87,8 +102,7 @@ public class UrlsController {
         } catch (Exception e) {
             ctx.sessionAttribute("flash", "Некорректный адрес");
             ctx.sessionAttribute("flashType", "error");
-            ctx.redirect(NamedRoutes.urlPath(urlId));
         }
-
+            ctx.redirect(NamedRoutes.urlPath(urlId));
     }
 }
