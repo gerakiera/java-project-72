@@ -67,14 +67,32 @@ public class AppTest {
             assertThat(url).contains("http://localhost:7070");
         });
     }
-    /*@Test
-    public void testAddBadUrl() {
-        JavalinTest.test(app, (srv, client) -> {
-            var requestBody = "url=abc";
-            var response = client.post("/urls", requestBody);
+    @Test
+    void testUrlsPage() {
+        JavalinTest.test(app, (server, client) -> {
+            var response = client.get("/urls");
             assertThat(response.code()).isEqualTo(200);
-            var urls = UrlsRepository.getByName("abc");
-            assertThat(urls).isEmpty();
+            //assertThat(response.body().string()).contains("ID", "Имя", "Последняя проверка", "Код ответа");
         });
-    }*/
+    }
+    @Test
+    void testUrlsShow() {
+        JavalinTest.test(app, (server, client) -> {
+            var response = client.get("/urls/2");
+            assertThat(response.code()).isEqualTo(404);
+        });
+    }
+
+    @Test
+    void testShowUrl() {
+        JavalinTest.test(app, (server, client) -> {
+            var newUrl = new Url("https://ru.hexlet.io/projects/72/members/39734?step=6");
+            UrlsRepository.save(newUrl);
+            var response = client.get("/urls/" + newUrl.getId());
+            var response2 = client.post("/urls/" + newUrl.getId() + "/checks");
+            assert response.body() != null;
+            assertThat(response.body().string()).contains("https://ru.hexlet.io");
+            assertThat(response2.code()).isEqualTo(200);
+        });
+    }
 }
