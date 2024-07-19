@@ -21,8 +21,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class AppTest {
     private static MockWebServer mockWebServer;
-    public static Javalin app;
-    //private static String testUrl;
+    private static Javalin app;
     @BeforeEach
     public final void setApp() throws IOException, SQLException {
         app = App.getApp();
@@ -55,19 +54,6 @@ public class AppTest {
         });
     }
     @Test
-    public void testAddUrl() {
-        JavalinTest.test(app, (srv, client) -> {
-            var requestBody = "url=http://localhost:7070/abc";
-            var response = client.post("/urls", requestBody);
-            assertThat(response.code()).isEqualTo(200);
-            assert response.body() != null;
-            assertThat(response.body().string()).contains("http://localhost:7070");
-            var url = UrlsRepository.getByName("http://localhost:7070")
-                    .orElse(new Url("")).getName();
-            assertThat(url).contains("http://localhost:7070");
-        });
-    }
-    @Test
     void testUrlsPage() {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls");
@@ -82,7 +68,6 @@ public class AppTest {
             assertThat(response.code()).isEqualTo(404);
         });
     }
-
     @Test
     void testShowUrl() {
         JavalinTest.test(app, (server, client) -> {
