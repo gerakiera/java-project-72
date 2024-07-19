@@ -12,16 +12,28 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class AppTest {
     private static MockWebServer mockWebServer;
     private static Javalin app;
+    private static String testUrl;
+
+    private static String readResourceFile(String fileName) throws IOException {
+        var inputStream = AppTest.class.getClassLoader().getResourceAsStream(fileName);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            return reader.lines().collect(Collectors.joining("\n"));
+        }
+    }
     @BeforeEach
     public final void setApp() throws IOException, SQLException {
         app = App.getApp();
@@ -30,13 +42,9 @@ public class AppTest {
     @BeforeAll
     public static void beforeAll() throws IOException {
         mockWebServer = new MockWebServer();
-        var html = Files.readString(Paths.get("src/test/resources/test.html"));
-        var serverResponse = new MockResponse()
-                .addHeader("Content-Type", "text/html; charset=utf-8")
-                .setResponseCode(200)
-                .setBody(html);
-        mockWebServer.enqueue(serverResponse);
         mockWebServer.start();
+        mockWebServer.enqueue(new MockResponse().setBody(readResourceFile("test.html")).setResponseCode(200));
+        testUrl = mockWebServer.url("/").toString();
     }
 
     @AfterAll
@@ -80,4 +88,20 @@ public class AppTest {
             assertThat(response2.code()).isEqualTo(200);
         });
     }
+
+    @Test
+    public void testUrlsRepository() throws SQLException {
+        Url url1 = new Url(testUrl);
+        Url url2 = new Url("https://example.com");
+        UrlsRepository.save(url1);
+        UrlsRepository.save(url2);
+        Url foundUrl1 = UrlsRepository.getByName(testUrl)
+                .orElseThrow(() -> new AssertionError("URL not found"));
+        assertThat(url1.getName()).isEqualTo(foundUrl1.getName());
+        Url foundUrl2 = UrlsRepository.find(2L)
+                .orElseThrow(() -> new AssertionError("URL not found"));
+        assertThat(url2.getName()).isEqualTo(foundUrl2.getName());
+        assertThat(UrlsRepository.getEntities().size()).isEqualTo(2);
+    }
+
 }
